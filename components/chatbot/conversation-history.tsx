@@ -22,8 +22,7 @@ export default function ConversationHistory({ conversations }: ConversationHisto
   const filteredConversations = conversations
     .filter(conv =>
       conv.sender.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      conv.recipient.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      conv.latestMessage.toLowerCase().includes(searchTerm.toLowerCase())
+      conv.recipient.toLowerCase().includes(searchTerm.toLowerCase())
     )
     .sort((a, b) => {
       if (sortBy === 'recent') {
@@ -104,7 +103,6 @@ export default function ConversationHistory({ conversations }: ConversationHisto
                       <th className="px-4 sm:px-6 py-3 sm:py-4 text-left font-semibold text-foreground whitespace-nowrap">Loại</th>
                       <th className="px-4 sm:px-6 py-3 sm:py-4 text-left font-semibold text-foreground whitespace-nowrap">Người gửi</th>
                       <th className="px-4 sm:px-6 py-3 sm:py-4 text-left font-semibold text-foreground whitespace-nowrap">Người nhận</th>
-                      <th className="px-4 sm:px-6 py-3 sm:py-4 text-left font-semibold text-foreground">Tin nhắn cuối</th>
                       <th className="px-4 sm:px-6 py-3 sm:py-4 text-left font-semibold text-foreground whitespace-nowrap">Cập nhật</th>
                       <th className="px-4 sm:px-6 py-3 sm:py-4 text-left font-semibold text-foreground whitespace-nowrap">Trạng thái</th>
                       <th className="px-4 sm:px-6 py-3 sm:py-4 text-left font-semibold text-foreground whitespace-nowrap">Hành động</th>
@@ -123,9 +121,6 @@ export default function ConversationHistory({ conversations }: ConversationHisto
                         </td>
                         <td className="px-4 sm:px-6 py-3 sm:py-4 font-medium text-foreground truncate">{conv.sender}</td>
                         <td className="px-4 sm:px-6 py-3 sm:py-4 text-foreground truncate">{conv.recipient}</td>
-                        <td className="px-4 sm:px-6 py-3 sm:py-4 text-muted-foreground max-w-xs truncate text-xs sm:text-sm">
-                          {conv.latestMessage}
-                        </td>
                         <td className="px-4 sm:px-6 py-3 sm:py-4 text-muted-foreground text-xs whitespace-nowrap">
                           {conv.lastUpdated}
                         </td>
@@ -197,12 +192,6 @@ export default function ConversationHistory({ conversations }: ConversationHisto
                     <div className="text-xs space-y-1">
                       <div><span className="text-muted-foreground">Người gửi:</span> <span className="font-medium text-foreground">{conv.sender}</span></div>
                       <div><span className="text-muted-foreground">Người nhận:</span> <span className="font-medium text-foreground">{conv.recipient}</span></div>
-                    </div>
-
-                    {/* Latest Message */}
-                    <div className="text-xs">
-                      <p className="text-muted-foreground mb-1">Tin nhắn cuối:</p>
-                      <p className="text-foreground line-clamp-2">{conv.latestMessage}</p>
                     </div>
 
                     {/* Date */}
