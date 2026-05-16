@@ -77,10 +77,20 @@ export default function ListingsPage() {
   const handleSelectAll = (checked: boolean) => {
     setSelectedAll(checked)
     setListings(
-      listings.map((listing) => ({
-        ...listing,
-        selectedAt: checked && statusFilter !== 'deleted',
-      }))
+      listings.map((listing) => {
+        // Only select listings from the current filter
+        if (statusFilter === 'pending') {
+          return listing.reviewStatus === 'pending' && !listing.deletedAt
+            ? { ...listing, selectedAt: checked }
+            : listing
+        } else if (statusFilter === 'approved') {
+          return listing.reviewStatus === 'approved' && !listing.deletedAt
+            ? { ...listing, selectedAt: checked }
+            : listing
+        }
+        // Don't allow selecting in deleted filter
+        return listing
+      })
     )
   }
 
@@ -126,19 +136,41 @@ export default function ListingsPage() {
     setConfirmDialog({ type: null })
   }
 
-  const handleDelete = (listingId: string) => {
+  const handleDelete = (listingId?: string) => {
     const today = new Date().toISOString().split('T')[0]
     setListings(
-      listings.map((listing) =>
-        listing.id === listingId
-          ? { ...listing, deletedAt: today, selectedAt: false }
-          : listing
-      )
+      listings.map((listing) => {
+        if (listingId) {
+          // Delete single listing
+          return listing.id === listingId
+            ? { ...listing, deletedAt: today, selectedAt: false }
+            : listing
+        } else {
+          // Delete all selected listings
+          return listing.selectedAt
+            ? { ...listing, deletedAt: today, selectedAt: false }
+            : listing
+        }
+      })
     )
+    setSelectedAll(false)
     setConfirmDialog({ type: null })
   }
 
-  const hasSelected = listings.some((l) => l.selectedAt)
+  const handleFilterChange = (newFilter: ListingStatus) => {
+    setStatusFilter(newFilter)
+    setSelectedAll(false)
+    // Clear all selections when switching filters
+    setListings(
+      listings.map((listing) => ({
+        ...listing,
+        selectedAt: false,
+      }))
+    )
+  }
+
+  const hasSelected = filteredListings.some((l) => l.selectedAt)
+  const selectedCount = filteredListings.filter((l) => l.selectedAt).length
 
   return (
     <div className="space-y-6 p-4 sm:p-6 lg:p-8">
@@ -153,10 +185,7 @@ export default function ListingsPage() {
       {/* Status Tabs */}
       <div className="flex flex-wrap gap-2 border-b border-border">
         <button
-          onClick={() => {
-            setStatusFilter('pending')
-            setSelectedAll(false)
-          }}
+          onClick={() => handleFilterChange('pending')}
           className={`px-4 py-2 font-medium text-sm transition-colors border-b-2 ${
             statusFilter === 'pending'
               ? 'border-primary text-primary'
@@ -166,10 +195,7 @@ export default function ListingsPage() {
           Chờ duyệt ({pendingCount})
         </button>
         <button
-          onClick={() => {
-            setStatusFilter('approved')
-            setSelectedAll(false)
-          }}
+          onClick={() => handleFilterChange('approved')}
           className={`px-4 py-2 font-medium text-sm transition-colors border-b-2 ${
             statusFilter === 'approved'
               ? 'border-primary text-primary'
@@ -179,10 +205,7 @@ export default function ListingsPage() {
           Đã duyệt ({approvedCount})
         </button>
         <button
-          onClick={() => {
-            setStatusFilter('deleted')
-            setSelectedAll(false)
-          }}
+          onClick={() => handleFilterChange('deleted')}
           className={`px-4 py-2 font-medium text-sm transition-colors border-b-2 ${
             statusFilter === 'deleted'
               ? 'border-primary text-primary'
@@ -194,17 +217,27 @@ export default function ListingsPage() {
       </div>
 
       {/* Toolbar */}
-      {hasSelected && statusFilter === 'pending' && (
+      {hasSelected && (statusFilter === 'pending' || statusFilter === 'approved') && (
         <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
           <span className="text-sm font-medium text-foreground">
-            Đã chọn {listings.filter((l) => l.selectedAt).length} tin
+            Đã chọn {selectedCount} tin
           </span>
-          <Button
-            onClick={() => setConfirmDialog({ type: 'approve' })}
-            className="bg-green-500 hover:bg-green-600 text-white gap-2"
-          >
-            Duyệt
-          </Button>
+          {statusFilter === 'pending' && (
+            <Button
+              onClick={() => setConfirmDialog({ type: 'approve' })}
+              className="bg-green-500 hover:bg-green-600 text-white gap-2"
+            >
+              Duyệt tất cả
+            </Button>
+          )}
+          {statusFilter === 'approved' && (
+            <Button
+              onClick={() => setConfirmDialog({ type: 'delete' })}
+              className="bg-pink-200 text-pink-700 hover:bg-pink-300 gap-2"
+            >
+              Xóa tất cả
+            </Button>
+          )}
         </div>
       )}
 
@@ -368,9 +401,13 @@ export default function ListingsPage() {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Xóa tin đăng</AlertDialogTitle>
+            <AlertDialogTitle>
+              {confirmDialog.listingId ? 'Xóa tin đăng' : 'Xóa tất cả các tin đã chọn'}
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              Bạn có chắc chắn muốn xóa tin này? Hành động này không thể hoàn tác.
+              {confirmDialog.listingId
+                ? 'Bạn có chắc chắn muốn xóa tin này? Hành động này không thể hoàn tác.'
+                : `Bạn có chắc chắn muốn xóa ${selectedCount} tin đã chọn? Hành động này không thể hoàn tác.`}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <div className="flex gap-3 justify-end">
@@ -379,7 +416,7 @@ export default function ListingsPage() {
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={() =>
-                handleDelete(confirmDialog.listingId || '')
+                handleDelete(confirmDialog.listingId)
               }
               className="bg-red-500 hover:bg-red-600"
             >
