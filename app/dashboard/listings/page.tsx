@@ -247,20 +247,23 @@ export default function ListingsPage() {
           <thead>
             <tr className="border-b border-border bg-muted/50">
               <th className="w-12 px-4 py-3 text-left">
-                {statusFilter !== 'deleted' && (
-                  <input
-                    type="checkbox"
-                    checked={selectedAll && filteredListings.length > 0}
-                    onChange={(e) => handleSelectAll(e.target.checked)}
-                    className="rounded"
-                  />
-                )}
+                <div className="flex flex-col items-center">
+                  <span className="text-xs font-medium text-foreground mb-1">Chọn tất</span>
+                  {statusFilter !== 'deleted' && (
+                    <input
+                      type="checkbox"
+                      checked={selectedAll && filteredListings.length > 0}
+                      onChange={(e) => handleSelectAll(e.target.checked)}
+                      className="rounded"
+                    />
+                  )}
+                </div>
               </th>
               <th className="px-4 py-3 text-left text-sm font-medium text-foreground">
-                Ngày duyệt bài
+                Ngày
               </th>
               <th className="px-4 py-3 text-left text-sm font-medium text-foreground">
-                Loại bài đăng
+                Danh mục
               </th>
               <th className="px-4 py-3 text-left text-sm font-medium text-foreground">
                 Người đăng
@@ -293,7 +296,7 @@ export default function ListingsPage() {
                     )}
                   </td>
                   <td className="px-4 py-3 text-sm text-foreground whitespace-nowrap">
-                    {listing.listingDate}
+                    {listing.createdDate}
                   </td>
                   <td className="px-4 py-3 text-sm">
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
@@ -303,9 +306,6 @@ export default function ListingsPage() {
                     }`}>
                       {listing.postingType === 'for_rent' ? 'Cho thuê trọ' : 'Tìm người ở ghép'}
                     </span>
-                  </td>
-                  <td className="px-4 py-3 text-sm text-foreground">
-                    {listing.building}
                   </td>
                   <td className="px-4 py-3 text-sm text-foreground">
                     {listing.landlordName}
@@ -439,7 +439,7 @@ export default function ListingsPage() {
       <Dialog open={detailModal.open} onOpenChange={(open) => setDetailModal({ open, listing: detailModal.listing })}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Chi tiết tin đăng</DialogTitle>
+            <DialogTitle>Chi tiết tin đ��ng</DialogTitle>
             <DialogDescription>
               Xem toàn bộ thông tin và lịch sử của tin đăng này
             </DialogDescription>
