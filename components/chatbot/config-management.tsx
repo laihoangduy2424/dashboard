@@ -37,19 +37,19 @@ export default function ConfigManagement({ models }: ConfigManagementProps) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Configuration Card */}
-      <Card className="p-6 border border-border">
-        <h3 className="text-lg font-semibold text-foreground mb-6">Cấu hình Chatbot</h3>
+      <Card className="p-4 sm:p-6 border border-border">
+        <h3 className="text-base sm:text-lg font-semibold text-foreground mb-4 sm:mb-6">Cấu hình Chatbot</h3>
 
-        <div className="space-y-5">
+        <div className="space-y-4 sm:space-y-5">
           {/* Model Selection */}
           <div className="space-y-2">
-            <Label htmlFor="model" className="text-sm font-medium text-foreground">
+            <Label htmlFor="model" className="text-xs sm:text-sm font-medium text-foreground">
               Mô hình
             </Label>
             <Select value={config.model} onValueChange={(value) => setConfig({ ...config, model: value })}>
-              <SelectTrigger id="model" className="bg-background border-border">
+              <SelectTrigger id="model" className="bg-background border-border text-sm sm:text-base">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -70,7 +70,7 @@ export default function ConfigManagement({ models }: ConfigManagementProps) {
 
           {/* System Prompt */}
           <div className="space-y-2">
-            <Label htmlFor="prompt" className="text-sm font-medium text-foreground">
+            <Label htmlFor="prompt" className="text-xs sm:text-sm font-medium text-foreground">
               Prompt hệ thống
             </Label>
             <Textarea
@@ -78,8 +78,8 @@ export default function ConfigManagement({ models }: ConfigManagementProps) {
               value={config.systemPrompt}
               onChange={(e) => setConfig({ ...config, systemPrompt: e.target.value })}
               placeholder="Nhập prompt hệ thống cho chatbot..."
-              rows={6}
-              className="bg-background border-border resize-none"
+              rows={5}
+              className="bg-background border-border resize-none text-xs sm:text-sm"
             />
             <p className="text-xs text-muted-foreground">
               {config.systemPrompt.length} ký tự
@@ -88,11 +88,11 @@ export default function ConfigManagement({ models }: ConfigManagementProps) {
 
           {/* Knowledge Source */}
           <div className="space-y-2">
-            <Label htmlFor="knowledge" className="text-sm font-medium text-foreground">
+            <Label htmlFor="knowledge" className="text-xs sm:text-sm font-medium text-foreground">
               Nguồn tri thức
             </Label>
             <Select value={config.knowledgeSource} onValueChange={(value) => setConfig({ ...config, knowledgeSource: value })}>
-              <SelectTrigger id="knowledge" className="bg-background border-border">
+              <SelectTrigger id="knowledge" className="bg-background border-border text-sm sm:text-base">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -107,13 +107,13 @@ export default function ConfigManagement({ models }: ConfigManagementProps) {
       </Card>
 
       {/* Token Management Card */}
-      <Card className="p-6 border-2 border-accent">
-        <h3 className="text-lg font-semibold text-foreground mb-6">Quản lý Token</h3>
+      <Card className="p-4 sm:p-6 border-2 border-accent">
+        <h3 className="text-base sm:text-lg font-semibold text-foreground mb-4 sm:mb-6">Quản lý Token</h3>
 
-        <div className="space-y-5">
+        <div className="space-y-4 sm:space-y-5">
           {/* Daily Token Limit */}
           <div className="space-y-2">
-            <Label htmlFor="daily-limit" className="text-sm font-medium text-foreground">
+            <Label htmlFor="daily-limit" className="text-xs sm:text-sm font-medium text-foreground">
               Số lượng token/ngày
             </Label>
             <Input
@@ -121,13 +121,13 @@ export default function ConfigManagement({ models }: ConfigManagementProps) {
               type="number"
               value={config.dailyTokenLimit}
               onChange={(e) => setConfig({ ...config, dailyTokenLimit: parseInt(e.target.value) || 0 })}
-              className="bg-background border-border"
+              className="bg-background border-border text-xs sm:text-sm"
             />
           </div>
 
           {/* Input Token Limit */}
           <div className="space-y-2">
-            <Label htmlFor="input-limit" className="text-sm font-medium text-foreground">
+            <Label htmlFor="input-limit" className="text-xs sm:text-sm font-medium text-foreground">
               Số lượng token đầu vào
             </Label>
             <Input
@@ -135,7 +135,7 @@ export default function ConfigManagement({ models }: ConfigManagementProps) {
               type="number"
               value={config.inputTokenLimit}
               onChange={(e) => setConfig({ ...config, inputTokenLimit: parseInt(e.target.value) || 0 })}
-              className="bg-background border-border"
+              className="bg-background border-border text-xs sm:text-sm"
             />
             <div className="w-full bg-muted rounded-full h-2">
               <div
@@ -150,7 +150,7 @@ export default function ConfigManagement({ models }: ConfigManagementProps) {
 
           {/* Output Token Limit */}
           <div className="space-y-2">
-            <Label htmlFor="output-limit" className="text-sm font-medium text-foreground">
+            <Label htmlFor="output-limit" className="text-xs sm:text-sm font-medium text-foreground">
               Số lượng token đầu ra
             </Label>
             <Input
@@ -158,7 +158,7 @@ export default function ConfigManagement({ models }: ConfigManagementProps) {
               type="number"
               value={config.outputTokenLimit}
               onChange={(e) => setConfig({ ...config, outputTokenLimit: parseInt(e.target.value) || 0 })}
-              className="bg-background border-border"
+              className="bg-background border-border text-xs sm:text-sm"
             />
             <div className="w-full bg-muted rounded-full h-2">
               <div
@@ -175,28 +175,29 @@ export default function ConfigManagement({ models }: ConfigManagementProps) {
 
       {/* Save Status */}
       {saveSuccess && (
-        <div className="flex items-center gap-3 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
-          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-          <p className="text-sm text-green-700">Cài đặt đã được lưu thành công</p>
+        <div className="flex items-center gap-3 p-3 sm:p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
+          <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></div>
+          <p className="text-xs sm:text-sm text-green-700">Cài đặt đã được lưu thành công</p>
         </div>
       )}
 
       {/* Save Button */}
-      <div className="flex justify-end gap-3">
+      <div className="flex justify-end gap-2 sm:gap-3">
         <Button
           onClick={handleSave}
           disabled={isSaving}
-          className="gap-2 bg-primary hover:bg-primary/90"
+          className="gap-1 sm:gap-2 bg-primary hover:bg-primary/90 text-xs sm:text-sm py-2 sm:py-2"
         >
           {isSaving ? (
             <>
-              <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin"></div>
-              Đang lưu...
+              <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin flex-shrink-0"></div>
+              <span className="hidden sm:inline">Đang lưu...</span>
+              <span className="sm:hidden">Lưu...</span>
             </>
           ) : (
             <>
-              <Save size={18} />
-              Lưu thay đổi
+              <Save size={16} className="flex-shrink-0" />
+              <span>Lưu thay đổi</span>
             </>
           )}
         </Button>

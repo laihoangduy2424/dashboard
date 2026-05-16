@@ -62,46 +62,46 @@ export default function ConversationDetailModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col">
+      <DialogContent className="w-[95%] sm:max-w-2xl max-h-[90vh] sm:max-h-[85vh] flex flex-col p-4 sm:p-6">
         <DialogHeader>
-          <DialogTitle className="text-lg font-semibold">Chi tiết cuộc hội thoại</DialogTitle>
+          <DialogTitle className="text-base sm:text-lg font-semibold">Chi tiết cuộc hội thoại</DialogTitle>
         </DialogHeader>
 
         {/* Conversation Header */}
-        <div className="grid grid-cols-2 gap-4 pb-4 border-b border-border">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 pb-4 border-b border-border">
           <div>
             <p className="text-xs font-medium text-muted-foreground mb-1">Loại hội thoại</p>
-            <p className="text-sm text-foreground">{convTypeConfig[conversation.conversationType]}</p>
+            <p className="text-xs sm:text-sm text-foreground">{convTypeConfig[conversation.conversationType]}</p>
           </div>
           <div>
             <p className="text-xs font-medium text-muted-foreground mb-1">Trạng thái</p>
             <div className="flex items-center gap-2">
               <div className={`w-2 h-2 rounded-full ${statusConfig[conversation.status].color}`}></div>
-              <span className="text-sm text-foreground">{statusConfig[conversation.status].label}</span>
+              <span className="text-xs sm:text-sm text-foreground">{statusConfig[conversation.status].label}</span>
             </div>
           </div>
           <div>
             <p className="text-xs font-medium text-muted-foreground mb-1">Người gửi</p>
-            <p className="text-sm font-medium text-foreground">{conversation.sender}</p>
+            <p className="text-xs sm:text-sm font-medium text-foreground">{conversation.sender}</p>
           </div>
           <div>
             <p className="text-xs font-medium text-muted-foreground mb-1">Người nhận</p>
-            <p className="text-sm font-medium text-foreground">{conversation.recipient}</p>
+            <p className="text-xs sm:text-sm font-medium text-foreground">{conversation.recipient}</p>
           </div>
-          <div className="col-span-2">
+          <div className="col-span-1 sm:col-span-2">
             <p className="text-xs font-medium text-muted-foreground mb-1">Cập nhật lần cuối</p>
-            <p className="text-sm text-foreground">{conversation.lastUpdated}</p>
+            <p className="text-xs sm:text-sm text-foreground">{conversation.lastUpdated}</p>
           </div>
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto space-y-4 py-4 min-h-[300px] max-h-[400px]">
+        <div className="flex-1 overflow-y-auto space-y-3 sm:space-y-4 py-4 min-h-[200px] sm:min-h-[300px]">
           {messages.map(msg => (
             <div
               key={msg.id}
-              className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
+              className={`flex gap-2 sm:gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
             >
-              <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium ${
+              <div className={`flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs font-medium ${
                 msg.role === 'user'
                   ? 'bg-primary text-primary-foreground'
                   : 'bg-muted text-muted-foreground'
@@ -109,18 +109,18 @@ export default function ConversationDetailModal({
                 {msg.role === 'user' ? 'B' : 'A'}
               </div>
 
-              <div className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
+              <div className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} flex-1 min-w-0`}>
                 <p className="text-xs font-medium text-muted-foreground mb-1">{msg.sender}</p>
                 <div
-                  className={`px-4 py-3 rounded-2xl max-w-xs ${
+                  className={`px-3 sm:px-4 py-2 sm:py-3 rounded-2xl max-w-xs sm:max-w-sm ${
                     msg.role === 'user'
                       ? 'bg-primary text-primary-foreground rounded-br-none'
                       : 'bg-muted text-foreground rounded-bl-none'
                   }`}
                 >
-                  <p className="text-sm leading-relaxed">{msg.content}</p>
+                  <p className="text-xs sm:text-sm leading-relaxed break-words">{msg.content}</p>
                 </div>
-                <p className={`text-xs text-muted-foreground mt-1 ${msg.role === 'user' ? 'mr-2' : 'ml-2'}`}>
+                <p className={`text-xs text-muted-foreground mt-1 ${msg.role === 'user' ? 'mr-2' : 'ml-2'} whitespace-nowrap`}>
                   {msg.timestamp}
                 </p>
               </div>
@@ -129,11 +129,11 @@ export default function ConversationDetailModal({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-end gap-2 pt-4 border-t border-border">
-          <Button variant="outline" onClick={onClose}>
+        <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 pt-4 border-t border-border">
+          <Button variant="outline" onClick={onClose} className="w-full sm:w-auto text-xs sm:text-sm">
             Đóng
           </Button>
-          <Button variant="outline" className="text-accent hover:text-accent">
+          <Button variant="outline" className="w-full sm:w-auto text-accent hover:text-accent text-xs sm:text-sm">
             Tải xuống
           </Button>
         </div>
