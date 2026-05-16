@@ -1,7 +1,7 @@
 'use client'
 
 import { TokenInfo } from '@/lib/mock-data'
-import { BarChart3, Trash2, AlertCircle } from 'lucide-react'
+import { Activity, Trash2, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 
@@ -19,93 +19,104 @@ export default function TokenManagement({ tokenInfo }: TokenManagementProps) {
 
   const tokensRemaining = tokenInfo.limit - tokenInfo.totalUsed
   const costEstimate = (tokenInfo.totalUsed / 1000000) * tokenInfo.costPerMillion
+  const usagePercentage = (tokenInfo.totalUsed / tokenInfo.limit) * 100
 
   return (
-    <div className="bg-card border border-border rounded-lg p-4 flex flex-col h-full">
+    <div className="bg-card border border-border rounded-lg p-5 flex flex-col h-full">
       {/* Header */}
-      <div className="flex items-center gap-2 mb-4">
-        <BarChart3 size={20} className="text-primary" />
-        <h3 className="text-sm font-semibold text-foreground">Quản lý Token</h3>
+      <div className="flex items-center gap-3 mb-5 pb-5 border-b border-border">
+        <div className="p-2 rounded-lg bg-secondary">
+          <Activity size={18} className="text-accent" />
+        </div>
+        <h3 className="text-sm font-semibold text-foreground">Token Analytics</h3>
       </div>
 
       {/* Token Usage Stats */}
-      <div className="space-y-4 flex-1">
-        {/* Progress Bar */}
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-medium text-foreground">Sử dụng</span>
-            <span className="text-xs text-muted-foreground">
-              {tokenInfo.totalUsed.toLocaleString()} / {tokenInfo.limit.toLocaleString()}
+      <div className="space-y-5 flex-1 overflow-y-auto">
+        {/* Usage Progress */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-medium text-foreground">Token sử dụng</span>
+            <span className="text-sm font-semibold text-foreground">
+              {tokenInfo.totalUsed.toLocaleString()}
             </span>
           </div>
-          <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
+          <div className="w-full bg-muted rounded-full h-3 overflow-hidden">
             <div
-              className="bg-primary h-full rounded-full transition-all"
-              style={{ width: `${tokenInfo.percentageUsed}%` }}
+              className={`h-full rounded-full transition-all duration-500 ${
+                usagePercentage > 80
+                  ? 'bg-destructive'
+                  : usagePercentage > 50
+                  ? 'bg-accent'
+                  : 'bg-primary'
+              }`}
+              style={{ width: `${Math.min(usagePercentage, 100)}%` }}
             />
           </div>
-          <p className="text-xs text-muted-foreground mt-1">
-            {tokenInfo.percentageUsed.toFixed(3)}% sử dụng
-          </p>
+          <div className="flex items-center justify-between">
+            <span className="text-xs text-muted-foreground">
+              {usagePercentage.toFixed(1)}% của {tokenInfo.limit.toLocaleString()} giới hạn
+            </span>
+            <span className="text-xs font-medium text-muted-foreground">
+              {tokensRemaining.toLocaleString()} còn lại
+            </span>
+          </div>
         </div>
 
-        {/* Token Statistics */}
-        <div className="bg-muted rounded-lg p-3 space-y-2">
-          <div className="flex justify-between">
-            <span className="text-xs text-muted-foreground">Tokens còn lại</span>
-            <span className="text-sm font-medium text-foreground">
-              {tokensRemaining.toLocaleString()}
-            </span>
+        {/* Statistics Cards */}
+        <div className="space-y-2">
+          <div className="bg-background rounded-lg p-4 border border-border">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-muted-foreground">Chi phí ước tính</span>
+              <span className="text-base font-semibold text-foreground">
+                ${costEstimate.toFixed(4)}
+              </span>
+            </div>
           </div>
-          <div className="flex justify-between">
-            <span className="text-xs text-muted-foreground">Chi phí ước tính</span>
-            <span className="text-sm font-medium text-foreground">
-              ${costEstimate.toFixed(4)}
-            </span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-xs text-muted-foreground">Giá (/ 1M tokens)</span>
-            <span className="text-sm font-medium text-foreground">
-              ${tokenInfo.costPerMillion}
-            </span>
+          <div className="bg-background rounded-lg p-4 border border-border">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-muted-foreground">Giá / 1M tokens</span>
+              <span className="text-base font-semibold text-foreground">
+                ${tokenInfo.costPerMillion}
+              </span>
+            </div>
           </div>
         </div>
 
         {/* Alert if usage is high */}
-        {tokenInfo.percentageUsed > 80 && (
-          <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-3 flex gap-2">
+        {usagePercentage > 80 && (
+          <div className="bg-destructive/8 border border-destructive/20 rounded-lg p-4 flex gap-3">
             <AlertCircle size={18} className="text-destructive flex-shrink-0 mt-0.5" />
-            <div className="text-xs text-destructive">
-              <p className="font-medium">Cảnh báo sử dụng cao</p>
-              <p className="text-destructive/80 mt-0.5">Bạn đã sử dụng hơn 80% giới hạn token</p>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-semibold text-destructive mb-0.5">Cảnh báo sử dụng cao</p>
+              <p className="text-xs text-destructive/80 leading-relaxed">Bạn đã sử dụng hơn 80% giới hạn token hàng ngày</p>
             </div>
           </div>
         )}
       </div>
 
       {/* Actions */}
-      <div className="pt-4 border-t border-border space-y-2 mt-auto">
+      <div className="pt-5 border-t border-border mt-auto">
         {!showDeleteConfirm ? (
           <Button
             variant="outline"
             size="sm"
             onClick={() => setShowDeleteConfirm(true)}
-            className="w-full gap-2 text-destructive hover:text-destructive"
+            className="w-full gap-2 text-destructive hover:text-destructive hover:bg-destructive/5"
           >
             <Trash2 size={16} />
             Xóa lịch sử token
           </Button>
         ) : (
-          <div className="space-y-2">
-            <p className="text-xs text-foreground font-medium">Bạn chắc chắn chứ?</p>
+          <div className="space-y-3">
+            <p className="text-xs text-foreground font-medium">Xóa lịch sử token?</p>
             <div className="flex gap-2">
               <Button
                 size="sm"
                 onClick={handleClearTokens}
-                variant="destructive"
-                className="flex-1"
+                className="flex-1 bg-destructive hover:bg-destructive/90"
               >
-                Xác nhận
+                Xóa
               </Button>
               <Button
                 size="sm"

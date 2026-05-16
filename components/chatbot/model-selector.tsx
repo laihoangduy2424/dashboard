@@ -2,7 +2,7 @@
 
 import { ChatbotModel } from '@/lib/mock-data'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Zap } from 'lucide-react'
+import { Cpu } from 'lucide-react'
 
 interface ModelSelectorProps {
   models: ChatbotModel[]
@@ -14,20 +14,22 @@ export default function ModelSelector({ models, selectedModel, onModelChange }: 
   const selected = models.find(m => m.id === selectedModel)
 
   return (
-    <div className="bg-card border border-border rounded-lg p-4">
-      <div className="flex items-center gap-2 mb-3">
-        <Zap size={20} className="text-primary" />
-        <h3 className="text-sm font-semibold text-foreground">Mô hình</h3>
+    <div className="bg-card border border-border rounded-lg p-5">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="p-2 rounded-lg bg-secondary">
+          <Cpu size={18} className="text-accent" />
+        </div>
+        <h3 className="text-sm font-semibold text-foreground">Chọn mô hình AI</h3>
       </div>
       <Select value={selectedModel} onValueChange={onModelChange}>
-        <SelectTrigger className="w-full">
+        <SelectTrigger className="w-full bg-background hover:bg-muted/50 transition-colors">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="w-full">
           {models.map(model => (
             <SelectItem key={model.id} value={model.id}>
-              <div className="flex flex-col">
-                <span className="font-medium">{model.name}</span>
+              <div className="flex flex-col gap-1">
+                <span className="font-medium text-sm">{model.name}</span>
                 <span className="text-xs text-muted-foreground">{model.description}</span>
               </div>
             </SelectItem>
@@ -35,9 +37,14 @@ export default function ModelSelector({ models, selectedModel, onModelChange }: 
         </SelectContent>
       </Select>
       {selected && (
-        <p className="text-xs text-muted-foreground mt-2">
-          Context Window: {selected.contextWindow.toLocaleString()} tokens
-        </p>
+        <div className="mt-4 pt-4 border-t border-border">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-medium text-muted-foreground">Context Window</span>
+            <span className="text-xs font-semibold text-foreground">
+              {selected.contextWindow.toLocaleString()} tokens
+            </span>
+          </div>
+        </div>
       )}
     </div>
   )

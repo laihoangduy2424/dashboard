@@ -40,47 +40,34 @@ export default function ChatbotPage() {
   }
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden">
-      {/* Mobile Tabs */}
-      <div className="lg:hidden border-b border-border bg-card sticky top-0 z-10">
-        <div className="flex gap-0">
-          <button
-            onClick={() => setMobileTab('history')}
-            className={`flex-1 px-4 py-3 text-center text-sm font-medium border-b-2 transition-colors ${
-              mobileTab === 'history'
-                ? 'border-primary text-primary'
-                : 'border-transparent text-muted-foreground'
-            }`}
-          >
-            Lịch sử
-          </button>
-          <button
-            onClick={() => setMobileTab('chat')}
-            className={`flex-1 px-4 py-3 text-center text-sm font-medium border-b-2 transition-colors ${
-              mobileTab === 'chat'
-                ? 'border-primary text-primary'
-                : 'border-transparent text-muted-foreground'
-            }`}
-          >
-            Chat
-          </button>
-          <button
-            onClick={() => setMobileTab('tokens')}
-            className={`flex-1 px-4 py-3 text-center text-sm font-medium border-b-2 transition-colors ${
-              mobileTab === 'tokens'
-                ? 'border-primary text-primary'
-                : 'border-transparent text-muted-foreground'
-            }`}
-          >
-            Token
-          </button>
+    <div className="h-screen flex flex-col overflow-hidden bg-background">
+      {/* Mobile Tabs Navigation */}
+      <div className="lg:hidden border-b border-border bg-card sticky top-0 z-20 shadow-sm">
+        <div className="flex">
+          {[
+            { id: 'history' as const, label: 'Lịch sử' },
+            { id: 'chat' as const, label: 'Chat' },
+            { id: 'tokens' as const, label: 'Token' },
+          ].map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setMobileTab(tab.id)}
+              className={`flex-1 px-4 py-3 text-center text-sm font-medium border-b-2 transition-all ${
+                mobileTab === tab.id
+                  ? 'border-primary text-primary'
+                  : 'border-transparent text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 flex gap-4 overflow-hidden p-4 lg:p-6">
-        {/* Chat History - Desktop: Left Column, Mobile: Tab */}
-        <div className={`hidden lg:flex lg:flex-col lg:w-64 ${mobileTab === 'history' ? 'flex flex-col' : ''}`}>
+      {/* Main Content Area */}
+      <div className="flex-1 flex gap-5 overflow-hidden p-4 lg:p-6">
+        {/* Chat History Sidebar - Desktop: Left Column */}
+        <div className="hidden lg:flex lg:flex-col lg:w-72 flex-shrink-0">
           <ChatHistory
             conversations={conversations}
             currentConversationId={currentConversationId}
@@ -92,7 +79,7 @@ export default function ChatbotPage() {
 
         {/* Mobile Chat History Tab */}
         {mobileTab === 'history' && (
-          <div className="lg:hidden flex-1 overflow-auto">
+          <div className="lg:hidden flex-1 min-w-0 overflow-auto">
             <ChatHistory
               conversations={conversations}
               currentConversationId={currentConversationId}
@@ -109,11 +96,11 @@ export default function ChatbotPage() {
           </div>
         )}
 
-        {/* Chat Area - Desktop: Middle Column, Mobile: Tab */}
-        <div className={`hidden lg:flex lg:flex-col lg:flex-1 min-w-0 ${mobileTab === 'chat' ? 'flex flex-col' : ''}`}>
+        {/* Chat Area - Desktop: Middle Column */}
+        <div className="hidden lg:flex lg:flex-col lg:flex-1 min-w-0 gap-4">
           {currentConversation && (
             <>
-              <div className="mb-4 flex flex-col gap-4">
+              <div className="flex flex-col gap-3 flex-shrink-0">
                 <ModelSelector
                   models={mockChatbotModels}
                   selectedModel={selectedModel}
@@ -143,14 +130,14 @@ export default function ChatbotPage() {
           </div>
         )}
 
-        {/* Token Management - Desktop: Right Column, Mobile: Tab */}
-        <div className={`hidden lg:flex lg:flex-col lg:w-80 ${mobileTab === 'tokens' ? 'flex flex-col' : ''}`}>
+        {/* Token Management - Desktop: Right Column */}
+        <div className="hidden lg:flex lg:flex-col lg:w-72 flex-shrink-0">
           <TokenManagement tokenInfo={mockTokenInfo} />
         </div>
 
         {/* Mobile Tokens Tab */}
         {mobileTab === 'tokens' && (
-          <div className="lg:hidden flex-1 overflow-auto">
+          <div className="lg:hidden flex-1 min-w-0 overflow-auto">
             <TokenManagement tokenInfo={mockTokenInfo} />
           </div>
         )}

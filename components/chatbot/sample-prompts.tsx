@@ -2,8 +2,7 @@
 
 import { SamplePrompt } from '@/lib/mock-data'
 import { useState } from 'react'
-import { ChevronDown, ChevronUp, Copy, Zap } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { ChevronDown, ChevronUp, Lightbulb } from 'lucide-react'
 
 interface SamplePromptsProps {
   prompts: SamplePrompt[]
@@ -11,51 +10,47 @@ interface SamplePromptsProps {
 
 export default function SamplePrompts({ prompts }: SamplePromptsProps) {
   const [expanded, setExpanded] = useState(true)
-  const [copiedId, setCopiedId] = useState<string | null>(null)
-
-  const handleCopy = (title: string) => {
-    navigator.clipboard.writeText(title)
-    setCopiedId(title)
-    setTimeout(() => setCopiedId(null), 2000)
-  }
 
   return (
-    <div className="bg-card border border-border rounded-lg p-4">
+    <div className="bg-card border border-border rounded-lg p-5">
       <button
         onClick={() => setExpanded(!expanded)}
-        className="flex items-center justify-between w-full mb-3"
+        className="flex items-center justify-between w-full transition-colors hover:text-accent"
       >
-        <div className="flex items-center gap-2">
-          <Zap size={20} className="text-primary" />
-          <h3 className="text-sm font-semibold text-foreground">Mẫu Prompt</h3>
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-secondary">
+            <Lightbulb size={18} className="text-accent" />
+          </div>
+          <h3 className="text-sm font-semibold text-foreground">Mẫu prompt gợi ý</h3>
         </div>
-        {expanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+        <div className="text-muted-foreground">
+          {expanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+        </div>
       </button>
 
       {expanded && (
-        <div className="space-y-2 max-h-48 overflow-y-auto">
+        <div className="space-y-2 mt-4 max-h-56 overflow-y-auto">
           {prompts.map(prompt => (
-            <div
+            <button
               key={prompt.id}
-              className="flex items-start justify-between gap-2 p-2 rounded-md hover:bg-muted transition-colors group"
+              onClick={() => navigator.clipboard.writeText(prompt.title)}
+              className="w-full text-left px-4 py-3 rounded-lg bg-background hover:bg-muted transition-all duration-200 border border-transparent hover:border-border group"
+              title="Nhấp để sao chép"
             >
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-foreground truncate">{prompt.title}</p>
-                <p className="text-xs text-muted-foreground truncate">{prompt.description}</p>
-                <span className="inline-block text-xs bg-muted text-muted-foreground px-2 py-1 rounded mt-1">
-                  {prompt.category}
+              <div className="flex items-start gap-2 justify-between">
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors truncate">
+                    {prompt.title}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                    {prompt.description}
+                  </p>
+                </div>
+                <span className="inline-flex items-center gap-1 ml-2 flex-shrink-0 px-2 py-1 rounded-md bg-secondary text-accent text-xs font-medium whitespace-nowrap">
+                  {prompt.tokenCount} token
                 </span>
               </div>
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => handleCopy(prompt.title)}
-                className="opacity-0 group-hover:opacity-100 transition-opacity"
-                title="Copy"
-              >
-                <Copy size={16} />
-              </Button>
-            </div>
+            </button>
           ))}
         </div>
       )}
