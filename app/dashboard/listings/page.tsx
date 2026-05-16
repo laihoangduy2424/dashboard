@@ -260,7 +260,7 @@ export default function ListingsPage() {
                 Ngày duyệt bài
               </th>
               <th className="px-4 py-3 text-left text-sm font-medium text-foreground">
-                Danh mục
+                Loại bài đăng
               </th>
               <th className="px-4 py-3 text-left text-sm font-medium text-foreground">
                 Người đăng
@@ -294,6 +294,15 @@ export default function ListingsPage() {
                   </td>
                   <td className="px-4 py-3 text-sm text-foreground whitespace-nowrap">
                     {listing.listingDate}
+                  </td>
+                  <td className="px-4 py-3 text-sm">
+                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                      listing.postingType === 'for_rent'
+                        ? 'bg-blue-100 text-blue-800'
+                        : 'bg-purple-100 text-purple-800'
+                    }`}>
+                      {listing.postingType === 'for_rent' ? 'Cho thuê trọ' : 'Tìm người ở ghép'}
+                    </span>
                   </td>
                   <td className="px-4 py-3 text-sm text-foreground">
                     {listing.building}
@@ -463,8 +472,10 @@ export default function ListingsPage() {
               {/* Location */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Danh mục</p>
-                  <p className="mt-1 text-sm text-foreground">{detailModal.listing.building}</p>
+                  <p className="text-sm font-medium text-muted-foreground">Loại bài đăng</p>
+                  <p className="mt-1 text-sm text-foreground">
+                    {detailModal.listing.postingType === 'for_rent' ? 'Cho thuê trọ' : 'Tìm người ở ghép'}
+                  </p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Địa chỉ</p>

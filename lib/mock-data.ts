@@ -32,6 +32,7 @@ export interface Room {
   bathrooms: number
   landlordId: string
   landlordName: string
+  postingType: 'for_rent' | 'looking_roommate'
   // Status on public website
   publicStatus: 'displaying' | 'hidden' | 'pending_review' | 'rented'
   reviewStatus?: 'pending' | 'approved' | 'rejected'
@@ -230,6 +231,7 @@ export const mockRooms: Room[] = [
     bathrooms: 1,
     landlordId: 'LL001',
     landlordName: 'Nguyễn Văn A',
+    postingType: 'for_rent',
     publicStatus: 'displaying',
     reviewStatus: 'approved',
     createdDate: '2024-01-20',
@@ -248,6 +250,7 @@ export const mockRooms: Room[] = [
     bathrooms: 1,
     landlordId: 'LL001',
     landlordName: 'Nguyễn Văn A',
+    postingType: 'for_rent',
     publicStatus: 'rented',
     reviewStatus: 'approved',
     createdDate: '2023-11-15',
@@ -266,6 +269,7 @@ export const mockRooms: Room[] = [
     bathrooms: 1,
     landlordId: 'LL002',
     landlordName: 'Trần Thị B',
+    postingType: 'looking_roommate',
     publicStatus: 'displaying',
     reviewStatus: 'approved',
     createdDate: '2024-02-01',
@@ -284,6 +288,7 @@ export const mockRooms: Room[] = [
     bathrooms: 2,
     landlordId: 'LL002',
     landlordName: 'Trần Thị B',
+    postingType: 'for_rent',
     publicStatus: 'hidden',
     reviewStatus: 'approved',
     createdDate: '2023-12-10',
@@ -303,6 +308,7 @@ export const mockRooms: Room[] = [
     bathrooms: 1,
     landlordId: 'LL004',
     landlordName: 'Hoàng Thị D',
+    postingType: 'looking_roommate',
     publicStatus: 'pending_review',
     reviewStatus: 'pending',
     createdDate: '2024-02-15',
@@ -320,6 +326,7 @@ export const mockRooms: Room[] = [
     bathrooms: 1,
     landlordId: 'LL004',
     landlordName: 'Hoàng Thị D',
+    postingType: 'for_rent',
     publicStatus: 'pending_review',
     reviewStatus: 'pending',
     createdDate: '2024-02-16',
